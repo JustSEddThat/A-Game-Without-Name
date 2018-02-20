@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.SceneManagement;
 public class GameController : MonoBehaviour 
 {
 
@@ -90,6 +90,10 @@ public class GameController : MonoBehaviour
 
 	void Update () 
 	{
+		if (Input.GetKeyDown (KeyCode.H))
+			SceneManager.LoadScene ("Test 2");
+		if (Input.GetKeyDown (KeyCode.G))
+			SceneManager.LoadScene ("Test");
 		
 		if (Input.GetKeyDown (KeyCode.Alpha1)) 
 		{
