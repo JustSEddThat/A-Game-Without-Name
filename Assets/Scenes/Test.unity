@@ -139,7 +139,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 8a8a00e0c10e8a94b8a7a561b6b274d6, type: 2}
+  - {fileID: 2100000, guid: 39619b91239e5984b8e7162db1e45004, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -475,7 +475,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: f688e9f6d37772e43b517fea5bc2d258, type: 2}
+  - {fileID: 2100000, guid: bf40a1a083278454b9c83aa7bee87531, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -625,8 +625,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mCam: {fileID: 1298243324}
-  level: 0
-  materials: []
+  level: 1
+  puzzlePieces:
+  - {fileID: 467712068}
+  - {fileID: 857582266}
+  - {fileID: 204073931}
+  - {fileID: 1094902450}
   selectedObject: {fileID: 0}
   numPieces: 4
 --- !u!1 &857582266
@@ -660,7 +664,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: a754d296936690d40ba9d34750613df2, type: 2}
+  - {fileID: 2100000, guid: f9dae0aa6b32efd4e8334f36a8d8d647, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -744,7 +748,7 @@ MeshRenderer:
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
   m_Materials:
-  - {fileID: 2100000, guid: 0466edf218a0e6c4087f11565372161b, type: 2}
+  - {fileID: 2100000, guid: 331df630eb1607d45bc8698d5e2f4dab, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

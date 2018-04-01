@@ -10,14 +10,16 @@ public class GameController : MonoBehaviour
 	float camMin, camMax;
 
 	[SerializeField]
-	public int level;
+	private int level;
 
-	public Material[] materials;
+
+	public GameObject[] puzzlePieces;
 
 	public GameObject selectedObject;
 
-	private GameObject[] targets;
+	public GameObject[] targets;
 
+	private Material[] materials;
 
 	private string pathForThisLevelImages;
 	private string pathForMaterials = "Material/";
@@ -34,35 +36,10 @@ public class GameController : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		if (level > 4)
-			pathForThisLevelImages = "Pictures/6Piece/L" + level+ "/";
-		else
-			pathForThisLevelImages = "Pictures/4Piece/L" + level+"/";
-		
 		camMin = 5;
 		camMax = 15;
 		selectedObject = null;
-		targets = GameObject.FindGameObjectsWithTag("Target");
-
-		if (numPieces < targets.Length)
-			for (int i = 0; i < 3; i++)
-			{
-				Destroy (targets [targets.Length - 1]);
-				Debug.Log ("one");
-			}
-		
-		cols = numPieces / rows;
-		pWidth = width / cols;
-		pHeight = height / 2;
-		originPoint = transform.position;
-		SpawnTargets ();
-
-		materials = Resources.LoadAll<Material> (pathForMaterials);
-		Texture[] textures = Resources.LoadAll<Texture> ("Pictures/6Piece/Test2/");
-
-		for (int i = 0; i < numPieces; i++)
-			materials [i].mainTexture = textures [i];
-
+		Init ();
 	}
 
 	void FixedUpdate()
@@ -101,6 +78,66 @@ public class GameController : MonoBehaviour
 		} 
 		else if (Input.GetKeyDown (KeyCode.Alpha2))
 			StartCoroutine(CameraZoomOut());
+
+		if (Input.GetKeyDown (KeyCode.N))
+			Debug.Log(CheckForCorrect ());
+	}
+
+	void Init()
+	{
+
+		pathForThisLevelImages = "Pictures/L" + level+"/";
+
+		//Set all active
+		foreach (GameObject go in targets)
+			go.SetActive (true);
+
+		foreach (GameObject go in puzzlePieces)
+			go.SetActive (true);
+
+		materials = Resources.LoadAll<Material> (pathForMaterials);
+		Texture[] textures = Resources.LoadAll<Texture> (pathForThisLevelImages);
+		//numPieces should be equal to the number of textures in path
+		numPieces = textures.Length;
+
+		//Give the materials the appropriate textures
+		for (int i = 0; i < numPieces; i++)
+			materials [i].mainTexture = textures [i];
+		
+
+		cols = numPieces / rows;
+		pWidth = width / cols;
+		pHeight = height / 2;
+		originPoint = transform.position;
+
+		//Change Puzzle pieces size
+		foreach (GameObject go in puzzlePieces)
+			go.transform.localScale = new Vector3(pWidth, pHeight, go.transform.localScale.z);
+
+
+
+		//Deactivate extra targets and pieces
+		for (int i = targets.Length-1; numPieces <= i; i--)
+		{
+			targets [i].SetActive (false);
+			Debug.Log ("one");
+		}
+
+		for (int i = puzzlePieces.Length-1; numPieces <= i; i--)
+			puzzlePieces [i].SetActive (false);
+
+		SpawnTargets ();
+
+	}
+
+	bool CheckForCorrect()
+	{
+		bool allCorrect = true;
+		for (int i = 0; i < numPieces; i++)
+			if ((Vector2)puzzlePieces [i].transform.position != (Vector2)targets [i].transform.position)
+				allCorrect = false;
+
+		return allCorrect;
 	}
 
 	void SpawnTargets()
