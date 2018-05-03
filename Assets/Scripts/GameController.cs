@@ -94,6 +94,7 @@ public class GameController : MonoBehaviour
 			}
 		}
 
+		//For moving selectedObject out of bounds
 		if (selectedObject != null) 
 			selectedObject.transform.position = new Vector3 (mCam.ScreenToWorldPoint (Input.mousePosition).x, mCam.ScreenToWorldPoint (Input.mousePosition).y, selectedObject.transform.position.z);
 
@@ -133,6 +134,9 @@ public class GameController : MonoBehaviour
 	void Init()
 	{
 		selectedObject = null;
+		isAlmostDone = false;
+		SpreadPieces ();
+		pieces = new List<PuzzlePiece> ();
 		pathForThisLevelImages = "Pictures/L" + level+"/";
 		pathForThisLevelSounds = "Sounds/L" + level + "/";
 		pathForThisLevelFullAudio = "Audio/L" + level + "/";
@@ -158,6 +162,7 @@ public class GameController : MonoBehaviour
 
 		cols = numPieces / rows;
 		pWidth = width / cols;
+
 		pHeight = height / 2;
 		originPoint = transform.position;
 
@@ -194,6 +199,18 @@ public class GameController : MonoBehaviour
 		return allCorrect;
 	}
 
+	Vector2 GetRandomCoordinates()
+	{
+		float x = Random.Range (screenWidth/2*-1f, screenWidth/2);
+		float y = Random.Range (screenHeight/2 * -1f, screenHeight/2);
+
+		if (Mathf.Abs (x) <= 5 || Mathf.Abs (y) <= 5)
+			return GetRandomCoordinates ();
+		else
+			return new Vector2 (x, y);
+	}
+
+
 	public void TryToAdvance()
 	{
 		if (CheckForCorrect ())
@@ -201,6 +218,8 @@ public class GameController : MonoBehaviour
 			audioComponent.clip = Resources.LoadAll<AudioClip>(pathForThisLevelFullAudio)[0];
 			audioComponent.Play ();
 			isAlmostDone = true;
+
+			StartCoroutine (waitUntilPoemEndThenAdvance ());
 		}
 		else
 		{
@@ -209,6 +228,13 @@ public class GameController : MonoBehaviour
 		}
 		
 			
+	}
+
+	void SpreadPieces()
+	{
+		//Randomize new positions of pieces
+		foreach (GameObject go in puzzlePieces)
+			go.transform.position = (Vector3)GetRandomCoordinates ();
 	}
 
 	void SpawnTargets()
@@ -265,7 +291,17 @@ public class GameController : MonoBehaviour
 
 	IEnumerator waitUntilPoemEndThenAdvance()
 	{
-		yield return null;
+		while (audioComponent.isPlaying)
+		{
+			yield return null;
+		}
+
+		yield return new WaitForSeconds (2f);
+		level++;
+		if (level == 3)
+			SceneManager.LoadScene (0);
+		else
+			Init ();
 	}
 
 	IEnumerator CameraZoomIn()
